@@ -1,0 +1,77 @@
+package com.dice.gameplayz.ui.home
+
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dice.core.abstraction.BaseFragment
+import com.dice.core.adapter.GameRecyclerViewAdapter
+import com.dice.core.vo.Result
+import com.dice.gameplayz.R
+import com.dice.gameplayz.databinding.FragmentHomeBinding
+import com.dice.gameplayz.ui.detail.DetailGameActivity
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
+    override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
+
+    private val gamesAdapter by lazy { GameRecyclerViewAdapter() }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupToolbar()
+        setupView()
+        getGames()
+        observeGamesResult()
+    }
+
+    private fun setupToolbar() {
+        (requireActivity() as AppCompatActivity).apply {
+            setSupportActionBar(binding.toolbar.root)
+            supportActionBar?.title = getString(R.string.popular_games)
+        }
+    }
+
+    private fun setupView() {
+        gamesAdapter.addOnClickAction { navigateToDetailGame(it.id) }
+        binding.rvGames.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            adapter = gamesAdapter
+        }
+        binding.error.root.setOnClickListener {
+            getGames(true)
+        }
+    }
+
+    private fun navigateToDetailGame(gameId: Int) {
+        DetailGameActivity.startActivity(requireContext(), gameId)
+    }
+
+    private fun getGames(refresh: Boolean = false) {
+        viewModel.getBestGames(refresh)
+    }
+
+    private fun observeGamesResult() {
+        viewModel.gameList.observe(viewLifecycleOwner) {
+            when (it) {
+                is Result.Success -> {
+                    binding.loading.isVisible = false
+                    binding.error.root.isVisible = false
+                    gamesAdapter.setData(it.data)
+                }
+                is Result.Error -> {
+                    binding.loading.isVisible = false
+                    binding.error.root.isVisible = true
+                }
+                is Result.Loading -> {
+                    binding.loading.isVisible = true
+                    binding.error.root.isVisible = false
+                }
+            }
+        }
+    }
+
+}
