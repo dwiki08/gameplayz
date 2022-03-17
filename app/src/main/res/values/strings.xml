@@ -1,14 +1,11 @@
 <resources>
     <string name="app_name">GamePlayz</string>
-    <string name="label_release_date">Release date:</string>
-    <string name="label_genres">Genres:</string>
     <string name="game_poster">Game Poster</string>
     <string name="game_backdrop">Game Backdrop Poster</string>
     <string name="popular">Popular</string>
     <string name="search">Search</string>
     <string name="favorite">Favorite</string>
     <string name="popular_games">Popular games</string>
-    <string name="platform_windows">Platform Windows</string>
     <string name="search_hint">Search your games…</string>
     <string name="about">About</string>
     <string name="add_to_favorite">Add to favorite</string>

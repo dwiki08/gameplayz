@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="game_poster">Game Poster</string>
+    <string name="platform_windows">Platform Windows</string>
+    <string name="label_release_date">Release date:</string>
+    <string name="label_genres">Genres:</string>
+</resources>
