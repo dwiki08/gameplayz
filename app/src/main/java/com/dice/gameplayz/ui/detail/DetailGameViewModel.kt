@@ -1,9 +1,9 @@
 package com.dice.gameplayz.ui.detail
 
 import androidx.lifecycle.*
-import com.dice.core.vo.Result
 import com.dice.core.domain.model.Game
 import com.dice.core.domain.usecase.GameUseCase
+import com.dice.core.vo.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

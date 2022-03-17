@@ -64,9 +64,9 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
 
     // Encryption
-    implementation "net.zetetic:android-database-sqlcipher:4.4.0"
-    implementation "androidx.sqlite:sqlite-ktx:2.2.0"
+    implementation "net.zetetic:android-database-sqlcipher:$sql_chiper_version"
+    implementation "androidx.sqlite:sqlite-ktx:$sqlite_ktx_version"
 
     // Test
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation "junit:junit:$junit_version"
 }

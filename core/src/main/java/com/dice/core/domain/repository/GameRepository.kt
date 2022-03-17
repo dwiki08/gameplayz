@@ -1,7 +1,7 @@
 package com.dice.core.domain.repository
 
-import com.dice.core.vo.Result
 import com.dice.core.domain.model.Game
+import com.dice.core.vo.Result
 import kotlinx.coroutines.flow.Flow
 
 interface GameRepository {

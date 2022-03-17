@@ -2,8 +2,7 @@ package com.dice.core.utils
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
 
 object StringExtensions {
     fun String.toLocalDate(dateFormat: String? = "yyyy-MM-dd"): String {

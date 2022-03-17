@@ -3,8 +3,8 @@ package com.dice.gameplayz.ui
 import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.dice.gameplayz.R
 import com.dice.core.abstraction.BaseActivity
+import com.dice.gameplayz.R
 import com.dice.gameplayz.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

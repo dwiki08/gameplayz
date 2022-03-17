@@ -1,6 +1,6 @@
 package com.dice.core.utils
 
-import java.util.Locale
+import java.util.*
 
 object Constants {
     val LOCALE_INDONESIA = Locale("id", "ID")
