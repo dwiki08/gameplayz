@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -18,10 +19,11 @@ import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class DetailGameActivity : BaseActivity<DetailGameViewModel, ActivityDetailGameBinding>() {
+class DetailGameActivity : BaseActivity<ActivityDetailGameBinding>() {
     override fun getViewBinding(): ActivityDetailGameBinding =
         ActivityDetailGameBinding.inflate(layoutInflater)
 
+    private val viewModel: DetailGameViewModel by viewModels()
     private var game: Game? = null
     private var isFavorite = false
 

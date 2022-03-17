@@ -151,7 +151,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/label_release_date"
             app:layout_constraintTop_toTopOf="@id/label_release_date"
-            tools:text="12 Februari 2022" />
+            tools:text="12 February 2022" />
 
         <TextView
             android:id="@+id/label_genres"

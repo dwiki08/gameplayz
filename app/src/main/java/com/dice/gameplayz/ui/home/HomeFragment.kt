@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dice.core.abstraction.BaseFragment
 import com.dice.core.adapter.GameRecyclerViewAdapter
@@ -14,9 +15,10 @@ import com.dice.gameplayz.ui.detail.DetailGameActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment<HomeViewModel, FragmentHomeBinding>() {
+class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun getViewBinding(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
 
+    private val viewModel: HomeViewModel by viewModels()
     private val gamesAdapter by lazy { GameRecyclerViewAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

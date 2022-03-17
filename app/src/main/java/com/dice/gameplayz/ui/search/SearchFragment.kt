@@ -7,20 +7,22 @@ import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dice.core.abstraction.BaseFragment
+import com.dice.core.adapter.GameRecyclerViewAdapter
 import com.dice.core.vo.Result
 import com.dice.gameplayz.R
-import com.dice.core.abstraction.BaseFragment
 import com.dice.gameplayz.databinding.FragmentSearchBinding
-import com.dice.core.adapter.GameRecyclerViewAdapter
 import com.dice.gameplayz.ui.detail.DetailGameActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchFragment : BaseFragment<SearchViewModel, FragmentSearchBinding>() {
+class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     override fun getViewBinding(): FragmentSearchBinding =
         FragmentSearchBinding.inflate(layoutInflater)
 
+    private val viewModel: SearchViewModel by viewModels()
     private val gamesAdapter by lazy { GameRecyclerViewAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

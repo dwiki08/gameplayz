@@ -4,12 +4,12 @@ import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.dice.gameplayz.R
-import com.dice.core.abstraction.BaseActivityBinding
+import com.dice.core.abstraction.BaseActivity
 import com.dice.gameplayz.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseActivityBinding<ActivityMainBinding>() {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun getViewBinding(): ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {

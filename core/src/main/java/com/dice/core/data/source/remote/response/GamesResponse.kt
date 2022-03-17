@@ -7,9 +7,6 @@ data class GamesResponse(
     @field:SerializedName("next")
     val nextUrl: String,
 
-    @field:SerializedName("previous")
-    val previousUrl: String,
-
     @field:SerializedName("count")
     val count: Int,
 

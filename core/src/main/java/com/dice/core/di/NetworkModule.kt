@@ -24,17 +24,18 @@ class NetworkModule {
             .add(BuildConfig.SERVER_HOSTNAME, BuildConfig.SSL_CERTIFICATE_2)
             .add(BuildConfig.SERVER_HOSTNAME, BuildConfig.SSL_CERTIFICATE_3)
             .build()
-        return OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-            .addInterceptor {
-                val original = it.request()
-                val url = original.url.newBuilder()
-                    .addQueryParameter("key", BuildConfig.API_KEY)
-                    .build()
-                val requestBuilder = original.newBuilder()
-                    .url(url)
-                return@addInterceptor it.proceed(requestBuilder.build())
-            }
+        val httpClient = OkHttpClient.Builder()
+        if (BuildConfig.DEBUG) {
+            httpClient.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        }
+        return httpClient.addInterceptor {
+            val original = it.request()
+            val url = original.url.newBuilder()
+                .addQueryParameter("key", BuildConfig.API_KEY)
+                .build()
+            val requestBuilder = original.newBuilder().url(url)
+            return@addInterceptor it.proceed(requestBuilder.build())
+        }
             .connectTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .certificatePinner(certificatePinner)

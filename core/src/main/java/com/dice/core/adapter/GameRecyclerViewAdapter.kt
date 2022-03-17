@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.dice.core.R
 import com.dice.core.databinding.ItemGameCardBinding
 import com.dice.core.domain.model.Game
@@ -43,6 +44,8 @@ class GameRecyclerViewAdapter : RecyclerView.Adapter<GameRecyclerViewAdapter.Gam
         fun bind(game: Game, onClickAction: ((Game) -> Unit)?) {
             Glide.with(binding.root.context)
                 .load(game.posterImage)
+                .skipMemoryCache(true)
+                .apply(RequestOptions().override(binding.imgBanner.width, binding.imgBanner.height))
                 .into(binding.imgBanner)
             binding.tvGenres.text = game.genres
             binding.tvTitle.text = game.name
