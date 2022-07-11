@@ -6,11 +6,12 @@ import android.view.View
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dice.core.abstraction.BaseFragment
-import com.dice.core.adapter.GameRecyclerViewAdapter
+import com.dice.gameplayz.adapter.GameRecyclerViewAdapter
+import com.dice.core.utils.ViewExtensions.hide
+import com.dice.core.utils.ViewExtensions.show
 import com.dice.core.vo.Result
 import com.dice.gameplayz.R
 import com.dice.gameplayz.databinding.FragmentSearchBinding
@@ -72,24 +73,24 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         viewModel.gameList.observe(viewLifecycleOwner) {
             when (it) {
                 is Result.Success -> {
-                    binding.snake.isVisible = false
-                    binding.loading.isVisible = false
-                    binding.error.root.isVisible = false
-                    binding.rvGames.isVisible = true
+                    binding.snake.hide()
+                    binding.loading.hide()
+                    binding.error.root.hide()
+                    binding.rvGames.show()
                     gamesAdapter.setData(it.data)
                 }
                 is Result.Error -> {
-                    binding.snake.isVisible = true
-                    binding.loading.isVisible = false
-                    binding.error.root.isVisible = true
-                    binding.rvGames.isVisible = false
+                    binding.snake.show()
+                    binding.loading.hide()
+                    binding.error.root.show()
+                    binding.rvGames.hide()
                     Log.d("GamesResult", "Error: ${it.code} - ${it.errorMessage}")
                 }
                 is Result.Loading -> {
-                    binding.snake.isVisible = false
-                    binding.loading.isVisible = true
-                    binding.error.root.isVisible = false
-                    binding.rvGames.isVisible = false
+                    binding.snake.hide()
+                    binding.loading.show()
+                    binding.error.root.hide()
+                    binding.rvGames.hide()
                 }
             }
         }

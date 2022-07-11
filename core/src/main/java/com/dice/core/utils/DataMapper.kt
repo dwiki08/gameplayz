@@ -8,63 +8,73 @@ import com.dice.core.domain.model.Game
 
 @Suppress("unused")
 object DataMapper {
-    fun mapDtoToDomain(data: GameDetailResponse): Game {
+    fun GameDetailResponse.toModel(): Game {
         return Game(
-            data.id,
-            data.name,
-            data.descriptionRaw ?: "",
-            data.released,
-            data.backgroundImage ?: "",
-            platformDtoToDomain(data.parentPlatforms),
-            genresDtoToString(data.genres),
-            data.ratingsCount,
-            data.rating ?: 0f,
-            data.ratingTop ?: 0f,
+            this.id,
+            this.name,
+            this.descriptionRaw ?: "",
+            this.released,
+            this.backgroundImage ?: "",
+            this.parentPlatforms.toModel(),
+            genresDtoToString(this.genres),
+            this.ratingsCount,
+            this.rating ?: 0f,
+            this.ratingTop ?: 0f,
             false
         )
     }
 
-    fun mapEntityToDomain(data: GameEntity): Game {
+    fun GameEntity.toModel(): Game {
         return Game(
-            data.id,
-            data.name,
-            data.description,
-            data.releaseDate,
-            data.posterImage,
-            platformEntityToDomain(data.platforms),
-            data.genres,
-            data.ratingsCount,
-            data.rating,
-            data.ratingTop,
-            data.isFavorite
+            this.id,
+            this.name,
+            this.description,
+            this.releaseDate,
+            this.posterImage,
+            platformEntityToDomain(this.platforms),
+            this.genres,
+            this.ratingsCount,
+            this.rating,
+            this.ratingTop,
+            this.isFavorite
         )
     }
 
-    fun mapDomainToEntity(data: Game): GameEntity {
+    fun Game.toEntity(): GameEntity {
         return GameEntity(
-            data.id,
-            data.name,
-            data.description,
-            data.releaseDate ?: "",
-            data.posterImage,
-            platformDomainToEntity(data.platforms),
-            data.genres,
-            data.ratingsCount,
-            data.rating,
-            data.ratingTop,
-            data.isFavorite
+            this.id,
+            this.name,
+            this.description,
+            this.releaseDate ?: "",
+            this.posterImage,
+            platformDomainToEntity(this.platforms),
+            this.genres,
+            this.ratingsCount,
+            this.rating,
+            this.ratingTop,
+            this.isFavorite
         )
     }
 
-    fun mapDtoToDomain(data: List<GameDetailResponse>): List<Game> = data.map { mapDtoToDomain(it) }
+    @JvmName("responseToModel")
+    fun List<GameDetailResponse>.toModel(): List<Game> {
+        return this.map { it.toModel() }
+    }
 
-    fun mapEntityToDomain(data: List<GameEntity>): List<Game> = data.map { mapEntityToDomain(it) }
+    @JvmName("entityToModel")
+    fun List<GameEntity>.toModel(): List<Game> {
+        return this.map { it.toModel() }
+    }
 
-    fun mapDomainToEntity(data: List<Game>): List<GameEntity> = data.map { mapDomainToEntity(it) }
+    @JvmName("modelToEntity")
+    fun List<Game>.toEntity(): List<GameEntity> {
+        return this.map { it.toEntity() }
+    }
 
-    private fun platformDtoToDomain(data: List<ParentPlatformsItemResponse>): List<Game.Platform> {
+    @JvmName("responsePlatformToModel")
+    fun List<ParentPlatformsItemResponse>.toModel(): MutableList<Game.Platform> {
         val platform = mutableListOf<Game.Platform>()
-        data.forEach { p ->
+        this.forEach { p ->
             when (p.platform.name.uppercase()) {
                 "PC" -> platform.add(Game.Platform.PC)
                 "PLAYSTATION" -> platform.add(Game.Platform.PLAYSTATION)

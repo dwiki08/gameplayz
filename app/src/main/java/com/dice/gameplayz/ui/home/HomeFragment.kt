@@ -3,11 +3,13 @@ package com.dice.gameplayz.ui.home
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dice.core.abstraction.BaseFragment
-import com.dice.core.adapter.GameRecyclerViewAdapter
+import com.dice.core.abstraction.PaginationScrollListener
+import com.dice.gameplayz.adapter.GameRecyclerViewAdapter
+import com.dice.core.utils.ViewExtensions.hide
+import com.dice.core.utils.ViewExtensions.show
 import com.dice.core.vo.Result
 import com.dice.gameplayz.R
 import com.dice.gameplayz.databinding.FragmentHomeBinding
@@ -25,7 +27,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
         setupView()
-        getGames()
+        viewModel.getGames()
         observeGamesResult()
     }
 
@@ -39,12 +41,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private fun setupView() {
         gamesAdapter.addOnClickAction { navigateToDetailGame(it.id) }
         binding.rvGames.apply {
-            layoutManager =
+            val linearLayoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            layoutManager = linearLayoutManager
             adapter = gamesAdapter
+            addOnScrollListener(object : PaginationScrollListener(linearLayoutManager) {
+                override fun loadMoreItems() {
+                    viewModel.getNextGames()
+                }
+
+                override fun isLastPage(): Boolean {
+                    return false
+                }
+
+                override fun isLoading(): Boolean {
+                    return gamesAdapter.isLoading()
+                }
+            })
         }
         binding.error.root.setOnClickListener {
-            getGames(true)
+            viewModel.getGames(true)
         }
     }
 
@@ -52,25 +68,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         DetailGameActivity.startActivity(requireContext(), gameId)
     }
 
-    private fun getGames(refresh: Boolean = false) {
-        viewModel.getBestGames(refresh)
-    }
-
     private fun observeGamesResult() {
         viewModel.gameList.observe(viewLifecycleOwner) {
             when (it) {
                 is Result.Success -> {
-                    binding.loading.isVisible = false
-                    binding.error.root.isVisible = false
-                    gamesAdapter.setData(it.data)
+                    binding.error.root.hide()
+                    gamesAdapter.hideLoading()
+                    gamesAdapter.addData(it.data)
                 }
                 is Result.Error -> {
-                    binding.loading.isVisible = false
-                    binding.error.root.isVisible = true
+                    binding.error.root.show()
+                    gamesAdapter.hideLoading()
                 }
                 is Result.Loading -> {
-                    binding.loading.isVisible = true
-                    binding.error.root.isVisible = false
+                    binding.error.root.hide()
+                    gamesAdapter.showLoading()
                 }
             }
         }

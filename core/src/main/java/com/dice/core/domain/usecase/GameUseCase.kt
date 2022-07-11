@@ -5,7 +5,7 @@ import com.dice.core.vo.Result
 import kotlinx.coroutines.flow.Flow
 
 interface GameUseCase {
-    fun getBestGames(): Flow<Result<List<Game>>>
+    fun getBestGames(page: Int): Flow<Result<List<Game>>>
     fun getDetailGame(id: Int): Flow<Result<Game>>
     fun searchGames(query: String): Flow<Result<List<Game>>>
     fun getFavoriteGames(): Flow<Result<List<Game>>>

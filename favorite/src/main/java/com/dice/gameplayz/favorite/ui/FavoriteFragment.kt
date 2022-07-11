@@ -8,7 +8,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dice.core.abstraction.BaseFragment
-import com.dice.core.adapter.GameRecyclerViewAdapter
+import com.dice.gameplayz.adapter.GameRecyclerViewAdapter
+import com.dice.core.utils.ViewExtensions.hide
+import com.dice.core.utils.ViewExtensions.show
 import com.dice.core.vo.Result
 import com.dice.gameplayz.di.FavoriteModule
 import com.dice.gameplayz.favorite.DaggerFavoriteComponent
@@ -74,16 +76,16 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>() {
             when (it) {
                 is Result.Success -> {
                     binding.snake.isVisible = it.data.isEmpty()
-                    binding.loading.isVisible = false
+                    binding.loading.hide()
                     gamesAdapter.setData(it.data.asReversed())
                 }
                 is Result.Error -> {
-                    binding.snake.isVisible = true
-                    binding.loading.isVisible = false
+                    binding.snake.show()
+                    binding.loading.hide()
                 }
                 is Result.Loading -> {
-                    binding.snake.isVisible = false
-                    binding.loading.isVisible = true
+                    binding.snake.hide()
+                    binding.loading.show()
                 }
             }
         }

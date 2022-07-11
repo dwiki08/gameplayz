@@ -20,19 +20,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/loading"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/lottie_loading" />
-
     <include
         android:id="@+id/error"
         layout="@layout/view_error_getting_data"

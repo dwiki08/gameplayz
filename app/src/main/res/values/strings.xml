@@ -11,4 +11,7 @@
     <string name="add_to_favorite">Add to favorite</string>
     <string name="error_text">Error while getting data :(</string>
     <string name="title_favorite">Favorite</string>
+    <string name="rating_top_format"> / %s</string>
+    <string name="platform_windows">Platform Windows</string>
+    <string name="label_release_date">Release date:</string>
 </resources>

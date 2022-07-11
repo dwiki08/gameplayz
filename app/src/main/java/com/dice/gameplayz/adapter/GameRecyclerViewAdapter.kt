@@ -1,4 +1,4 @@
-package com.dice.core.adapter
+package com.dice.gameplayz.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -7,15 +7,16 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.dice.core.R
-import com.dice.core.databinding.ItemGameCardBinding
 import com.dice.core.domain.model.Game
 import com.dice.core.utils.StringExtensions.toLocalDate
+import com.dice.gameplayz.R
+import com.dice.gameplayz.databinding.ItemGameCardBinding
+import com.dice.gameplayz.databinding.ItemGameCardLoadingBinding
 
 @SuppressLint("NotifyDataSetChanged")
-class GameRecyclerViewAdapter : RecyclerView.Adapter<GameRecyclerViewAdapter.GameViewHolder>() {
+class GameRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val listGame = mutableListOf<Game>()
+    private val listGame = mutableListOf<Game?>()
     private var onClickAction: ((Game) -> Unit)? = null
 
     fun setData(listGame: List<Game>) {
@@ -24,22 +25,55 @@ class GameRecyclerViewAdapter : RecyclerView.Adapter<GameRecyclerViewAdapter.Gam
         notifyDataSetChanged()
     }
 
+    fun addData(listGame: List<Game>) {
+        this.listGame.addAll(listGame)
+        notifyItemRangeInserted(this.listGame.size - 1, listGame.size)
+    }
+
+    fun showLoading() {
+        if (isLoading().not()) {
+            this.listGame.add(null)
+            notifyItemRangeInserted(this.listGame.size - 1, 1)
+        }
+    }
+
+    fun hideLoading() {
+        this.listGame.remove(null)
+        notifyItemRemoved(this.listGame.size - 1)
+    }
+
+    fun isLoading() = listGame.contains(null)
+
     fun addOnClickAction(onClickAction: ((Game) -> Unit)) {
         this.onClickAction = onClickAction
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder {
-        val view = ItemGameCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return GameViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            TYPE_GAME -> GameViewHolder(ItemGameCardBinding.inflate(inflater, parent, false))
+            else -> LoadingViewHolder(ItemGameCardLoadingBinding.inflate(inflater, parent, false))
+        }
     }
 
-    override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
-        holder.bind(listGame[position], onClickAction)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is GameViewHolder -> listGame[position]?.let { holder.bind(it, onClickAction) }
+            is LoadingViewHolder -> {}
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (listGame[position] == null) {
+            TYPE_LOADING
+        } else {
+            TYPE_GAME
+        }
     }
 
     override fun getItemCount(): Int = listGame.size
 
-    class GameViewHolder(private val binding: ItemGameCardBinding) :
+    internal class GameViewHolder(private val binding: ItemGameCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(game: Game, onClickAction: ((Game) -> Unit)?) {
             Glide.with(binding.root.context)
@@ -63,5 +97,13 @@ class GameRecyclerViewAdapter : RecyclerView.Adapter<GameRecyclerViewAdapter.Gam
             binding.icPlatformMacOs.isVisible = game.platforms.contains(Game.Platform.MAC_OS)
             binding.card.setOnClickListener { onClickAction?.invoke(game) }
         }
+    }
+
+    internal class LoadingViewHolder(binding: ItemGameCardLoadingBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
+    companion object {
+        private const val TYPE_GAME = 0
+        private const val TYPE_LOADING = 1
     }
 }

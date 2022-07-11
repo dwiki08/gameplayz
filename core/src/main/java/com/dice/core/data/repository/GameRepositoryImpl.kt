@@ -4,7 +4,8 @@ import com.dice.core.data.source.local.LocalDataSource
 import com.dice.core.data.source.remote.RemoteDataSource
 import com.dice.core.domain.model.Game
 import com.dice.core.domain.repository.GameRepository
-import com.dice.core.utils.DataMapper
+import com.dice.core.utils.DataMapper.toEntity
+import com.dice.core.utils.DataMapper.toModel
 import com.dice.core.vo.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -29,7 +30,7 @@ class GameRepositoryImpl @Inject constructor(
             when (val remoteSource =
                 remoteDataSource.getGames(ordering, dates, page, pageSize).first()) {
                 is Result.Success -> {
-                    emit(Result.Success(DataMapper.mapDtoToDomain(remoteSource.data)))
+                    emit(Result.Success(remoteSource.data.toModel()))
                 }
                 is Result.Error -> {
                     emit(Result.Error(remoteSource.code, remoteSource.errorMessage))
@@ -45,7 +46,7 @@ class GameRepositoryImpl @Inject constructor(
             when (val remoteSource =
                 remoteDataSource.getDetailGame(id).first()) {
                 is Result.Success -> {
-                    emit(Result.Success(DataMapper.mapDtoToDomain(remoteSource.data)))
+                    emit(Result.Success(remoteSource.data.toModel()))
                 }
                 is Result.Error -> {
                     emit(Result.Error(remoteSource.code, remoteSource.errorMessage))
@@ -61,7 +62,7 @@ class GameRepositoryImpl @Inject constructor(
             when (val remoteSource =
                 remoteDataSource.searchGames(query).first()) {
                 is Result.Success -> {
-                    emit(Result.Success(DataMapper.mapDtoToDomain(remoteSource.data)))
+                    emit(Result.Success(remoteSource.data.toModel()))
                 }
                 is Result.Error -> {
                     emit(Result.Error(remoteSource.code, remoteSource.errorMessage))
@@ -75,7 +76,7 @@ class GameRepositoryImpl @Inject constructor(
         return flow {
             emit(Result.Loading)
             val result = localDataSource.getGames()
-            emit(Result.Success(DataMapper.mapEntityToDomain(result)))
+            emit(Result.Success(result.toModel()))
         }
     }
 
@@ -84,7 +85,7 @@ class GameRepositoryImpl @Inject constructor(
             emit(Result.Loading)
             val result = localDataSource.getGame(id)
             if (result != null) {
-                emit(Result.Success(DataMapper.mapEntityToDomain(result)))
+                emit(Result.Success(result.toModel()))
             } else {
                 emit(Result.Error(null, "Data Not Found"))
             }
@@ -102,10 +103,10 @@ class GameRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addGame(game: Game) {
-        localDataSource.addGame(DataMapper.mapDomainToEntity(game))
+        localDataSource.addGame(game.toEntity())
     }
 
     override suspend fun updateGame(game: Game) {
-        localDataSource.updateGame(DataMapper.mapDomainToEntity(game))
+        localDataSource.updateGame(game.toEntity())
     }
 }

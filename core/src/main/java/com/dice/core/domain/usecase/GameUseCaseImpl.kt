@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GameUseCaseImpl @Inject constructor(private val repository: GameRepository) : GameUseCase {
-    override fun getBestGames(): Flow<Result<List<Game>>> {
+    override fun getBestGames(page: Int): Flow<Result<List<Game>>> {
         return repository.getGamesRemote(
-            page = 1,
+            page = page,
             pageSize = 20
         )
     }

@@ -17,14 +17,27 @@ class HomeViewModel @Inject constructor(
     private val gamesUseCase: GameUseCase
 ) : ViewModel() {
 
+    private var currentPage = 1
+
     private val _gameList = MutableLiveData<Result<List<Game>>>()
     val gameList: LiveData<Result<List<Game>>>
         get() = _gameList
 
-    fun getBestGames(refresh: Boolean = false) {
+    fun getNextGames() {
+        currentPage++
+        getGames(true)
+    }
+
+    fun getPreviousGames() {
+        currentPage--
+        if (currentPage < 1) currentPage = 1
+        getGames(true)
+    }
+
+    fun getGames(refresh: Boolean = false) {
         if (gameList.value == null || refresh) {
             viewModelScope.launch {
-                gamesUseCase.getBestGames().collectLatest {
+                gamesUseCase.getBestGames(currentPage).collectLatest {
                     _gameList.postValue(it)
                 }
             }
