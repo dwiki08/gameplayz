@@ -9,10 +9,10 @@ plugins {
 apply from: '../shared_dependencies.gradle'
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
-        minSdk 23
+        minSdk 24
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
