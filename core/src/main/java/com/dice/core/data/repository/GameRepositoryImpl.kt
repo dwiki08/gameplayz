@@ -9,7 +9,6 @@ import com.dice.core.vo.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -92,12 +91,10 @@ class GameRepositoryImpl @Inject constructor(
     }
 
     override fun getFavoriteGames(): Flow<Result<List<Game>>> {
-        return getGamesDB().map { result ->
-            return@map if (result is Result.Success) {
-                Result.Success(result.data.filter { it.isFavorite })
-            } else {
-                result
-            }
+        return flow {
+            emit(Result.Loading)
+            val result = localDataSource.getFavoriteGames()
+            emit(Result.Success(DataMapper.mapEntityToDomain(result)))
         }
     }
 

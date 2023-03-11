@@ -75,7 +75,7 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>() {
                 is Result.Success -> {
                     binding.snake.isVisible = it.data.isEmpty()
                     binding.loading.isVisible = false
-                    gamesAdapter.setData(it.data.asReversed())
+                    gamesAdapter.submitList(it.data.asReversed())
                 }
                 is Result.Error -> {
                     binding.snake.isVisible = true

@@ -21,6 +21,10 @@ class LocalDataSource @Inject constructor(
         return gameDao.getGames()
     }
 
+    suspend fun getFavoriteGames(): List<GameEntity> {
+        return gameDao.getFavoriteGames()
+    }
+
     suspend fun getGame(id: Int): GameEntity? {
         return gameDao.getGame(id)
     }

@@ -21,11 +21,19 @@ class SearchViewModel @Inject constructor(
     val gameList: LiveData<Result<List<Game>>>
         get() = _gameList
 
+    private var query = ""
+
     fun searchGames(query: String) {
-        viewModelScope.launch {
-            gameUseCase.searchGames(query).collectLatest {
-                _gameList.postValue(it)
+        when {
+            query != this.query && query.isNotEmpty() -> {
+                viewModelScope.launch {
+                    gameUseCase.searchGames(query).collectLatest {
+                        _gameList.postValue(it)
+                    }
+                }
             }
+            query.isEmpty() -> _gameList.postValue(Result.Success(listOf()))
         }
+        this.query = query
     }
 }

@@ -8,13 +8,13 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import com.bumptech.glide.Glide
 import com.dice.core.abstraction.BaseActivity
 import com.dice.core.domain.model.Game
 import com.dice.core.utils.StringExtensions.toLocalDate
 import com.dice.core.vo.Result
 import com.dice.gameplayz.R
 import com.dice.gameplayz.databinding.ActivityDetailGameBinding
+import com.dice.gameplayz.utils.Extensions.loadUrl
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -50,38 +50,36 @@ class DetailGameActivity : BaseActivity<ActivityDetailGameBinding>() {
     }
 
     private fun setupView(game: Game) {
-        binding.tvTitle.text = game.name
-        binding.tvOverview.text = game.description
-        binding.tvDateRelease.text = game.releaseDate?.toLocalDate()
-        Glide.with(this)
-            .load(game.posterImage)
-            .into(binding.imgBackdrop)
-        Glide.with(this)
-            .load(game.posterImage)
-            .into(binding.imgPoster)
-        binding.appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, offset ->
-            val menuFavorite = binding.toolbar.menu.findItem(R.id.menu_add_favorite)
-            if (offset < -500) {
-                binding.collapsingToolbar.title = game.name
-                binding.collapsingToolbar.setCollapsedTitleTextColor(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.white
+        binding.run {
+            tvTitle.text = game.name
+            tvOverview.text = game.description
+            tvDateRelease.text = game.releaseDate?.toLocalDate()
+            imgPoster.loadUrl(game.posterImage)
+            imgBackdrop.loadUrl(game.posterImage)
+            appBar.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, offset ->
+                val menuFavorite = toolbar.menu.findItem(R.id.menu_add_favorite)
+                if (offset < -500) {
+                    collapsingToolbar.title = game.name
+                    collapsingToolbar.setCollapsedTitleTextColor(
+                        ContextCompat.getColor(
+                            this@DetailGameActivity,
+                            R.color.white
+                        )
                     )
+                    menuFavorite.isVisible = true
+                } else {
+                    collapsingToolbar.title = ""
+                    menuFavorite.isVisible = false
+                }
+            })
+            error.root.setBackgroundColor(
+                ContextCompat.getColor(
+                    this@DetailGameActivity,
+                    R.color.primaryDark
                 )
-                menuFavorite.isVisible = true
-            } else {
-                binding.collapsingToolbar.title = ""
-                menuFavorite.isVisible = false
-            }
-        })
-        binding.error.root.setBackgroundColor(
-            ContextCompat.getColor(
-                this,
-                R.color.primaryDark
             )
-        )
-        binding.fabAddFavorite.setOnClickListener { addOrDeleteFavorite() }
+            fabAddFavorite.setOnClickListener { addOrDeleteFavorite() }
+        }
     }
 
     private fun getDetailGame(id: Int) {
@@ -141,7 +139,7 @@ class DetailGameActivity : BaseActivity<ActivityDetailGameBinding>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> onBackPressed()
+            android.R.id.home -> finish()
             R.id.menu_add_favorite -> addOrDeleteFavorite()
         }
         return super.onOptionsItemSelected(item)

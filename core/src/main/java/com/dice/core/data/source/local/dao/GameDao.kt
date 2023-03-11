@@ -2,7 +2,6 @@ package com.dice.core.data.source.local.dao
 
 import androidx.room.*
 import com.dice.core.data.source.local.entity.GameEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GameDao {
@@ -10,7 +9,7 @@ interface GameDao {
     suspend fun getGames(): List<GameEntity>
 
     @Query("SELECT * FROM tb_game WHERE is_favorite = 1")
-    fun getFavoriteGames(): Flow<List<GameEntity>>
+    suspend fun getFavoriteGames(): List<GameEntity>
 
     @Query("SELECT * FROM tb_game WHERE game_id = :id")
     suspend fun getGame(id: Int): GameEntity?

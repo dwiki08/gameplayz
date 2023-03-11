@@ -1,7 +1,8 @@
 package com.dice.gameplayz.ui.search
 
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
@@ -24,6 +25,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     private val viewModel: SearchViewModel by viewModels()
     private val gamesAdapter by lazy { GameRecyclerViewAdapter() }
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,12 +51,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             setHintTextColor(ContextCompat.getColor(requireContext(), R.color.gray))
         }
         binding.searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
+            override fun onQueryTextChange(query: String): Boolean {
+                delayedSearchGames(query)
+                return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                searchGames(query)
+                delayedSearchGames(query)
                 return true
             }
         })
@@ -64,35 +67,43 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         DetailGameActivity.startActivity(requireContext(), gameId)
     }
 
-    private fun searchGames(query: String) {
-        viewModel.searchGames(query)
+    private fun delayedSearchGames(query: String) {
+        handler.removeCallbacksAndMessages(null)
+        handler.postDelayed({
+            viewModel.searchGames(query)
+        }, SEARCH_DELAY)
     }
 
     private fun observeGameResult() {
-        viewModel.gameList.observe(viewLifecycleOwner) {
-            when (it) {
-                is Result.Success -> {
-                    binding.snake.isVisible = false
-                    binding.loading.isVisible = false
-                    binding.error.root.isVisible = false
-                    binding.rvGames.isVisible = true
-                    gamesAdapter.setData(it.data)
-                }
-                is Result.Error -> {
-                    binding.snake.isVisible = true
-                    binding.loading.isVisible = false
-                    binding.error.root.isVisible = true
-                    binding.rvGames.isVisible = false
-                    Log.d("GamesResult", "Error: ${it.code} - ${it.errorMessage}")
-                }
-                is Result.Loading -> {
-                    binding.snake.isVisible = false
-                    binding.loading.isVisible = true
-                    binding.error.root.isVisible = false
-                    binding.rvGames.isVisible = false
+        binding.run {
+            viewModel.gameList.observe(viewLifecycleOwner) {
+                when (it) {
+                    is Result.Success -> {
+                        snake.isVisible = it.data.isEmpty()
+                        loading.isVisible = false
+                        error.root.isVisible = false
+                        rvGames.isVisible = true
+                        gamesAdapter.submitList(it.data)
+                    }
+                    is Result.Error -> {
+                        snake.isVisible = true
+                        loading.isVisible = false
+                        error.root.isVisible = true
+                        rvGames.isVisible = false
+                    }
+                    is Result.Loading -> {
+                        snake.isVisible = false
+                        loading.isVisible = true
+                        error.root.isVisible = false
+                        rvGames.isVisible = false
+                    }
                 }
             }
         }
+    }
+
+    companion object {
+        private const val SEARCH_DELAY = 500L
     }
 
 }

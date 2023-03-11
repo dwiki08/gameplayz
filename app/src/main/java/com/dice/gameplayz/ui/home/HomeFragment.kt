@@ -62,7 +62,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 is Result.Success -> {
                     binding.loading.isVisible = false
                     binding.error.root.isVisible = false
-                    gamesAdapter.setData(it.data)
+                    gamesAdapter.submitList(it.data)
                 }
                 is Result.Error -> {
                     binding.loading.isVisible = false
