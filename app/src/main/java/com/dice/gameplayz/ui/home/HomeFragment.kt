@@ -2,7 +2,6 @@ package com.dice.gameplayz.ui.home
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,11 +28,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         observeGamesResult()
     }
 
+    override fun onDestroyView() {
+        binding.rvGames.adapter = null
+        super.onDestroyView()
+    }
+
     private fun setupToolbar() {
-        (requireActivity() as AppCompatActivity).apply {
-            setSupportActionBar(binding.toolbar.root)
-            supportActionBar?.title = getString(R.string.popular_games)
-        }
+        binding.toolbar.root.title = getString(R.string.popular_games)
     }
 
     private fun setupView() {

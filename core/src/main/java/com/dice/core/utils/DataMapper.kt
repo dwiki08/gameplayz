@@ -62,9 +62,9 @@ object DataMapper {
 
     fun mapDomainToEntity(data: List<Game>): List<GameEntity> = data.map { mapDomainToEntity(it) }
 
-    private fun platformDtoToDomain(data: List<ParentPlatformsItemResponse>): List<Game.Platform> {
+    private fun platformDtoToDomain(data: List<ParentPlatformsItemResponse>?): List<Game.Platform> {
         val platform = mutableListOf<Game.Platform>()
-        data.forEach { p ->
+        data?.forEach { p ->
             when (p.platform.name.uppercase()) {
                 "PC" -> platform.add(Game.Platform.PC)
                 "PLAYSTATION" -> platform.add(Game.Platform.PLAYSTATION)
@@ -102,13 +102,15 @@ object DataMapper {
         return result.toString()
     }
 
-    private fun genresDtoToString(data: List<GenresItemResponse>): String {
+    private fun genresDtoToString(data: List<GenresItemResponse>?): String {
         val result = StringBuilder().append("")
-        for (i in data.indices) {
-            if (i < data.size - 1) {
-                result.append("${data[i].name}, ")
-            } else {
-                result.append(data[i].name)
+        if (data != null) {
+            for (i in data.indices) {
+                if (i < data.size - 1) {
+                    result.append("${data[i].name}, ")
+                } else {
+                    result.append(data[i].name)
+                }
             }
         }
         return result.toString()

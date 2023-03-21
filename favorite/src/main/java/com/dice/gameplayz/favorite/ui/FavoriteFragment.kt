@@ -3,7 +3,6 @@ package com.dice.gameplayz.favorite.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,7 +11,6 @@ import com.dice.core.adapter.GameRecyclerViewAdapter
 import com.dice.core.vo.Result
 import com.dice.gameplayz.di.FavoriteModule
 import com.dice.gameplayz.favorite.DaggerFavoriteComponent
-import com.dice.gameplayz.favorite.R
 import com.dice.gameplayz.favorite.ViewModelFactory
 import com.dice.gameplayz.favorite.databinding.FragmentFavoriteBinding
 import com.dice.gameplayz.ui.detail.DetailGameActivity
@@ -44,20 +42,12 @@ class FavoriteFragment : BaseFragment<FragmentFavoriteBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupToolbar()
         setupView()
     }
 
     override fun onStart() {
         super.onStart()
         getFavoriteGames()
-    }
-
-    private fun setupToolbar() {
-        (requireActivity() as AppCompatActivity).apply {
-            setSupportActionBar(binding.toolbar)
-            supportActionBar?.title = getString(R.string.favorite_list)
-        }
     }
 
     private fun setupView() {

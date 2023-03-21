@@ -61,8 +61,7 @@
             android:contentDescription="@string/platform_windows"
             android:src="@drawable/ic_platform_playstation"
             app:layout_constraintStart_toEndOf="@id/ic_platform_xbox"
-            app:layout_constraintTop_toBottomOf="@id/img_banner"
-            app:tint="@color/white" />
+            app:layout_constraintTop_toBottomOf="@id/img_banner" />
 
         <ImageView
             android:id="@+id/ic_platform_nintendo"

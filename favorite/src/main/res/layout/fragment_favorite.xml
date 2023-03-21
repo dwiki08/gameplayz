@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@color/primary"
         app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/favorite_list"
         app:titleTextColor="@color/white" />
 
     <androidx.recyclerview.widget.RecyclerView

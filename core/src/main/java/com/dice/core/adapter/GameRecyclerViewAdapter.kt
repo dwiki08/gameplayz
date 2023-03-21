@@ -49,7 +49,6 @@ class GameRecyclerViewAdapter :
             binding.run {
                 Glide.with(root.context)
                     .load(game.posterImage)
-                    .skipMemoryCache(true)
                     .apply(RequestOptions().override(imgBanner.width, imgBanner.height))
                     .into(imgBanner)
                 tvGenres.text = game.genres

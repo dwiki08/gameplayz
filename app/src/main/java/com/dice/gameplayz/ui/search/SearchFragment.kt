@@ -103,7 +103,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     }
 
     companion object {
-        private const val SEARCH_DELAY = 500L
+        private const val SEARCH_DELAY = 700L
     }
 
 }
