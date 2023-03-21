@@ -22,7 +22,8 @@
             app:contentScrim="@color/primary"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:statusBarScrim="@color/primaryDark">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
